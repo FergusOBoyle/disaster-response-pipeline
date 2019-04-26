@@ -1,4 +1,4 @@
 /wordnet
-myDisasterDatabase.db
+*.db
 disaster_model
 .ipynb_checkpoints/
