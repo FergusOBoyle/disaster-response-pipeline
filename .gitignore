@@ -1,4 +1,5 @@
 /wordnet
 *.db
+*.pkl
 disaster_model
 .ipynb_checkpoints/
