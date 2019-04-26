@@ -9,19 +9,15 @@ def load_data(messages_filepath, categories_filepath):
     Load Disaster message and Disaster message category data into a single dataframe
 
     Args:
-        messages_filepath: filepath of the disaster message data (relative to ./data directory)
-        categories_filepath: filepath of the disaster message category data (relative to ./data directory)
+        messages_filepath: filepath of the disaster message data
+        categories_filepath: filepath of the disaster message category data
     
     Returns:
         A dataframe of the merged tables
     """
-    data_directory = "./data/"
-    message_file = "messages.csv"
-    categories_file = "categories.csv"
-    database_name = "fergus2.db"
 
-    messages = pd.read_csv(data_directory + message_file)
-    categories = pd.read_csv(data_directory + categories_file)
+    messages = pd.read_csv(messages_filepath)
+    categories = pd.read_csv(categories_filepath)
 
     df = messages.merge(categories, on='id', how='left')
 
