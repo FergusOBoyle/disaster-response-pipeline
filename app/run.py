@@ -26,11 +26,11 @@ def tokenize(text):
     return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/YourDatabaseName.db')
-df = pd.read_sql_table('YourTableName', engine)
+engine = create_engine('sqlite:///../DisasterResponse.db')
+df = pd.read_sql_table('messages_table', engine)
 
 # load model
-model = joblib.load("../models/your_model_name.pkl")
+model = joblib.load("../disaster_model.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -82,8 +82,9 @@ def go():
 
     # use model to predict classification for query
     classification_labels = model.predict([query])[0]
+    classification_labels = classification_labels.astype(int)
     classification_results = dict(zip(df.columns[4:], classification_labels))
-
+    print(classification_results)
     # This will render the go.html Please see that file. 
     return render_template(
         'go.html',
