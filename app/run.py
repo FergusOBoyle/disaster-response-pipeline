@@ -39,12 +39,18 @@ model = joblib.load("../disaster_model.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+    
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    classes = df.iloc[:, 4:].astype(int)
+    sums = classes.sum()
+
+    genre_plus_classes = pd.merge(df['genre'], classes, left_index=True, right_index=True)
+    groups = genre_plus_classes.groupby(['genre']).sum()
+    grouped_table = groups.sort_values(by='direct', axis=1, ascending=False)
+
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
@@ -63,7 +69,64 @@ def index():
                     'title': "Genre"
                 }
             }
+        },
+
+       {
+            'data': [
+                Bar(
+                    x=sums.index,
+                    y=sums.values
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Predictions',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'automargin': True
+                }          
+            }
+        },
+
+         {
+            'data': [
+                Bar(
+                    x=grouped_table.loc['direct'].values,
+                    y=grouped_table.columns,
+                    orientation = 'h',
+                    name = 'Direct'
+                ),
+                Bar(
+                    x=grouped_table.loc['news'].values,
+                    y=grouped_table.columns,
+                    orientation = 'h',
+                    name = 'News'
+                ),
+                 Bar(
+                    x=grouped_table.loc['social'].values,
+                    y=grouped_table.columns,
+                    orientation = 'h',
+                    name = 'Social'
+                )
+
+            ],
+
+            'layout': {
+                'title': 'Breakdown of Predictions per Genre',
+                'xaxis': {
+                    'title': "Count"
+                },
+                'yaxis': {
+                    'automargin': True
+                },
+                'barmode': 'stack',
+                'height': 750
+            }
         }
+
+
     ]
     
     # encode plotly graphs in JSON
